@@ -1,0 +1,168 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="dashboard-container">
+    <h2><i class="fas fa-user-cog"></i> Employee Dashboard</h2>
+    <p>Welcome, {{ current_user.username }} ({{ employee_type|replace('_', ' ')|title }})</p>
+
+    <!-- Quick Action Cards (for all employees) -->
+    <div class="actions-grid">
+        <div class="action-card">
+            <i class="fas fa-map-marked-alt"></i>
+            <h3>Site Survey</h3>
+            <p>Conduct site inspections, upload reports</p>
+            <a href="{{ url_for('site_survey') }}" class="action-btn">Go →</a>
+        </div>
+        <div class="action-card">
+            <i class="fas fa-calculator"></i>
+            <h3>BOQ Generation</h3>
+            <p>Create Bill of Quantities</p>
+            <a href="{{ url_for('boq') }}" class="action-btn">Go →</a>
+        </div>
+        <div class="action-card">
+            <i class="fas fa-chart-line"></i>
+            <h3>Update Progress</h3>
+            <p>Log completed tasks, upload photos</p>
+            <a href="{{ url_for('progress') }}" class="action-btn">Go →</a>
+        </div>
+    </div>
+
+    <!-- Role‑Specific Sections -->
+    {% if employee_type == 'survey_operator' %}
+        <div class="dashboard-section">
+            <h3><i class="fas fa-map-marked-alt"></i> Assigned Site Surveys</h3>
+            {% if tasks %}
+            <table class="data-table">
+                <thead>
+                    <tr><th>Location</th><th>Survey Date</th><th>Status</th><th>Actions</th></tr>
+                </thead>
+                <tbody>
+                    {% for survey in tasks %}
+                    <tr>
+                        <td>{{ survey.location }}</td>
+                        <td>{{ survey.created_at[:10] if survey.created_at else '—' }}</td>
+                        <td><span class="status-badge">{{ survey.status }}</span></td>
+                        <td><a href="{{ url_for('site_survey') }}?id={{ survey.id }}" class="btn-small">View/Edit</a></td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            {% else %}
+            <p>No surveys assigned yet.</p>
+            {% endif %}
+        </div>
+
+    {% elif employee_type == 'safety_officer' %}
+        <div class="dashboard-section">
+            <h3><i class="fas fa-shield-alt"></i> Safety Audits</h3>
+            {% if tasks %}
+            <table class="data-table">
+                <thead>
+                    <tr><th>Site Location</th><th>Audit Date</th><th>Risk Level</th><th>Status</th><th>Actions</th></tr>
+                </thead>
+                <tbody>
+                    {% for audit in tasks %}
+                    <tr>
+                        <td>{{ audit.site_location }}</td>
+                        <td>{{ audit.audit_date }}</td>
+                        <td><span class="risk-{{ audit.overall_risk }}">{{ audit.overall_risk|title }}</span></td>
+                        <td>{{ audit.status }}</td>
+                        <td><a href="{{ url_for('safety') }}?id={{ audit.id }}" class="btn-small">View</a></td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            {% else %}
+            <p>No safety audits assigned yet.</p>
+            {% endif %}
+        </div>
+    {% else %}
+        <!-- Generic employee: show nothing extra -->
+    {% endif %}
+</div>
+
+<style>
+    .dashboard-container {
+        max-width: 1200px;
+        margin: 0 auto;
+    }
+    .actions-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 1.5rem;
+        margin: 2rem 0;
+    }
+    .action-card {
+        background: white;
+        border-radius: 24px;
+        padding: 1.5rem;
+        text-align: center;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+        transition: transform 0.2s;
+    }
+    .action-card:hover {
+        transform: translateY(-5px);
+    }
+    .action-card i {
+        font-size: 2.5rem;
+        color: #e67e22;
+        margin-bottom: 0.5rem;
+    }
+    .action-card h3 {
+        margin: 0.5rem 0;
+    }
+    .action-card p {
+        color: #666;
+        margin-bottom: 1rem;
+    }
+    .action-btn {
+        display: inline-block;
+        background: #e67e22;
+        color: white;
+        padding: 8px 20px;
+        border-radius: 40px;
+        text-decoration: none;
+        font-weight: bold;
+        transition: 0.2s;
+    }
+    .action-btn:hover {
+        background: #f39c12;
+        transform: translateX(2px);
+    }
+    .dashboard-section {
+        background: white;
+        border-radius: 24px;
+        padding: 1.5rem;
+        margin-bottom: 2rem;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    }
+    .data-table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+    .data-table th, .data-table td {
+        padding: 0.75rem;
+        text-align: left;
+        border-bottom: 1px solid #eee;
+    }
+    .status-badge {
+        background: #f39c12;
+        padding: 2px 8px;
+        border-radius: 20px;
+        font-size: 0.8rem;
+        color: white;
+    }
+    .risk-low { color: #27ae60; font-weight: bold; }
+    .risk-medium { color: #f39c12; font-weight: bold; }
+    .risk-high, .risk-critical { color: #e74c3c; font-weight: bold; }
+    .btn-small {
+        background: #e67e22;
+        color: white;
+        padding: 4px 12px;
+        border-radius: 20px;
+        text-decoration: none;
+        font-size: 0.8rem;
+        display: inline-block;
+    }
+</style>
+{% endblock %}

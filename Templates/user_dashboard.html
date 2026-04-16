@@ -1,0 +1,162 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="dashboard-container">
+    <h2><i class="fas fa-helmet-safety"></i> Project Manager Dashboard</h2>
+    <p>Welcome, {{ current_user.username }}. Manage your projects from here.</p>
+
+    <!-- Quick Action Cards -->
+    <div class="actions-grid">
+        <div class="action-card">
+            <i class="fas fa-users"></i>
+            <h3>Match Teams</h3>
+            <p>Assign internal crews and machinery</p>
+            <a href="{{ url_for('team') }}" class="action-btn">Go →</a>
+        </div>
+
+        <div class="action-card">
+            <i class="fas fa-file-signature"></i>
+            <h3>Finalize Service Agreement</h3>
+            <p>Generate contract, get client signature</p>
+            <a href="{{ url_for('agreement') }}" class="action-btn">Go →</a>
+        </div>
+
+        <div class="action-card">
+            <i class="fas fa-truck-moving"></i>
+            <h3>Dispatch Crew</h3>
+            <p>Schedule transport & site setup</p>
+            <a href="{{ url_for('dispatch') }}" class="action-btn">Go →</a>
+        </div>
+
+        <div class="action-card">
+            <i class="fas fa-shopping-cart"></i>
+            <h3>Execute Purchases</h3>
+            <p>Create purchase orders from BOQ</p>
+            <a href="{{ url_for('orders') }}" class="action-btn">Go →</a>
+        </div>
+
+        <div class="action-card">
+            <i class="fas fa-credit-card"></i>
+            <h3>Process Payment</h3>
+            <p>Milestone invoicing & payment verification</p>
+            <a href="{{ url_for('payments') }}" class="action-btn">Go →</a>
+        </div>
+
+        <div class="action-card">
+            <i class="fas fa-certificate"></i>
+            <h3>Send Completion Certificate</h3>
+            <p>Final handover & certificate generation</p>
+            <a href="{{ url_for('safety') }}" class="action-btn">Go →</a>
+        </div>
+    </div>
+
+    <!-- Recent Activity Section (optional) -->
+    <div class="recent-section">
+        <h3>Recent Project Activity</h3>
+        <div class="activity-list">
+            <div class="activity-item">
+                <i class="fas fa-check-circle"></i>
+                <div>
+                    <strong>Team Allocation</strong>
+                    <p>Excavation crew assigned to Site A – 2 days ago</p>
+                </div>
+            </div>
+            <div class="activity-item">
+                <i class="fas fa-file-invoice"></i>
+                <div>
+                    <strong>Purchase Order #PO-2456</strong>
+                    <p>Steel rebar ordered – status: delivered</p>
+                </div>
+            </div>
+            <div class="activity-item">
+                <i class="fas fa-hand-holding-usd"></i>
+                <div>
+                    <strong>Payment Received</strong>
+                    <p>$45,000 for milestone "Foundation" – 1 week ago</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .dashboard-container {
+        max-width: 1200px;
+        margin: 0 auto;
+    }
+    .actions-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+        gap: 1.5rem;
+        margin: 2rem 0;
+    }
+    .action-card {
+        background: white;
+        border-radius: 24px;
+        padding: 1.5rem;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+        transition: transform 0.2s, box-shadow 0.2s;
+        text-align: center;
+    }
+    .action-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+    }
+    .action-card i {
+        font-size: 2.5rem;
+        color: #e67e22;
+        margin-bottom: 0.5rem;
+    }
+    .action-card h3 {
+        margin: 0.5rem 0;
+        font-size: 1.2rem;
+    }
+    .action-card p {
+        color: #666;
+        font-size: 0.9rem;
+        margin-bottom: 1rem;
+    }
+    .action-btn {
+        display: inline-block;
+        background: #e67e22;
+        color: white;
+        padding: 8px 20px;
+        border-radius: 40px;
+        text-decoration: none;
+        font-weight: bold;
+        transition: 0.2s;
+    }
+    .action-btn:hover {
+        background: #f39c12;
+        transform: translateX(2px);
+    }
+    .recent-section {
+        background: white;
+        border-radius: 24px;
+        padding: 1.5rem;
+        margin-top: 1rem;
+    }
+    .activity-list {
+        margin-top: 1rem;
+    }
+    .activity-item {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        padding: 0.8rem 0;
+        border-bottom: 1px solid #eee;
+    }
+    .activity-item i {
+        font-size: 1.3rem;
+        color: #27ae60;
+    }
+    .activity-item strong {
+        display: block;
+    }
+    .activity-item p {
+        margin: 0;
+        color: #666;
+        font-size: 0.85rem;
+    }
+</style>
+{% endblock %}
